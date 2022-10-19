@@ -288,9 +288,11 @@ void QSListModel::setProperty(int idx, QString property, QVariant value)
     if (idx < 0 || idx >= m_storage.size())
         return;
 
-    QVector<int> roles;
     QVariantMap item = get(idx);
+    if (item[property] == value)
+        return;
 
+    QVector<int> roles;
     QHashIterator<int, QByteArray> i(m_roles);
     while (i.hasNext()) {
         i.next();
