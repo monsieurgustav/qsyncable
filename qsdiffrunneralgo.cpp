@@ -59,20 +59,31 @@ QList<QSPatch> QSDiffRunnerAlgo::compareWithoutKey(const QVariantList &from, con
 
 QVariantMap QSDiffRunnerAlgo::compareMap(const QVariantMap &prev, const QVariantMap &current)
 {
-    // To make this function faster, it won't track removed fields from prev.
-    // Clear a field to null value should set it explicitly.
-
     QVariantMap diff;
 
-    QMap<QString, QVariant>::const_iterator iter = current.begin();
+    {
+        QMap<QString, QVariant>::const_iterator iter = current.begin();
 
-    while (iter != current.end()) {
-        QString key = iter.key();
-        if (!prev.contains(key) ||
-             prev[key] != iter.value()) {
-            diff[key] = iter.value();
+        while (iter != current.end()) {
+            QString key = iter.key();
+            if (!prev.contains(key) ||
+                 prev[key] != iter.value()) {
+                diff[key] = iter.value();
+            }
+            iter++;
         }
-        iter++;
+    }
+
+    {
+        // detect removed keys
+        QMap<QString, QVariant>::const_iterator iter = prev.begin();
+        while (iter != prev.end()) {
+            const QString& key = iter.key();
+            if (!current.contains(key)) {
+                diff[key] = QVariant{};
+            }
+            iter++;
+        }
     }
 
     return diff;

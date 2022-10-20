@@ -337,7 +337,12 @@ void QSListModel::set(int idx, QVariantMap data)
                 roles << m_rolesLookup[iter.key()];
             }
 
-            original[iter.key()] = iter.value();
+            if (iter.value().isValid()) {
+                original[iter.key()] = iter.value();
+            }
+            else {
+                original.remove(iter.key());
+            }
         }
     }
 
