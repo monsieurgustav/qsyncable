@@ -5,7 +5,6 @@
 */
 #include <QHash>
 #include <QDebug>
-#include <QLinkedList>
 #include "qsdiffrunner.h"
 #include "priv/qsdiffrunneralgo_p.h"
 
